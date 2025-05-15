@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Kompletní konfigurátor obojku</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .colors {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 10px;
+      max-width: 600px;
+    }
+    .color-option {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+    }
+    .color-option.selected {
+      border-color: #000;
+    }
+    .color-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .color-label {
+      font-size: 11px;
+      margin-top: 4px;
+      word-break: break-word;
+    }
+    svg {
+      width: 100%;
+      height: auto;
+    }
+.flag {
+  width: 40px;
+  height: 25px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.flag.selected {
+  border-color: black;
+}
+
+  </style>
+</head>
+<body>
+  <h2>Konfigurátor obojku</h2>
+
+  <div class="section">
+    <label for="widthSelect"><strong>Šíře popruhu:</strong></label>
+    <select id="widthSelect">
+  <option value="15">15 mm</option>
+  <option value="20">20 mm (+30 Kč)</option>
+  <option value="25">25 mm (+50 Kč)</option>
+  <option value="30" selected>30 mm (+80 Kč)</option>
+  <option value="40">40 mm (+80 Kč)</option>
+</select>
+
+  </div>
+
+  <div class="section">
+    <label class="label">Barva popruhu</label>
+    <div id="strapColors" class="colors"></div>
+  </div>
+
+  <div class="section">
+    <label class="label">Barva polstrování</label>
+    <div id="borderColors" class="colors"></div>
+  </div>
+
+  <div class="section">
+    <label class="label">Typ spony</label>
+    <select id="sponaSelect">
+      <option value="plast">Plastová (0 Kč)</option>
+      <option value="kov">Kovová (+120 Kč)</option>
+    </select>
+  </div>
+
+  <div class="section">
+    <label class="label">Typ posuvky</label>
+    <select id="posuvkaSelect">
+      <option value="plast">Plastová (0 Kč)</option>
+      <option value="nerez">Nerezová (+25 Kč)</option>
+    </select>
+  </div>
+
+  <div class="section">
+    <label><input type="checkbox" id="reflexStitky"> Reflexní štítky (+85 Kč)</label><br>
+    <label><input type="checkbox" id="reflexLemovka"> Reflexní lemovka (+80 Kč)</label>
+  </div>
+
+<div class="section">
+  <label class="label">Přívěšek</label>
+  <select id="privesekSelect">
+    <option value="">-- vyberte --</option>
+    <option value="kost">Štrasová kost (+45 Kč)</option>
+    <option value="tlapka">Štrasová tlapka (+45 Kč)</option>
+    <option value="cernaTlapka">Černobílá tlapka (+45 Kč)</option>
+    <option value="srdicko">Štrasové srdíčko (+45 Kč)</option>
+    <option value="srdickoChrom">Chromované srdíčko (+45 Kč)</option>
+  </select>
+</div>
+
+<div class="section">
+  <label class="label">Výšivka na obojek</label>
+  <select id="vysivkaSelect">
+    <option value="">-- vyberte --</option>
+    <option value="jmenoTelefon">Jméno + Telefonní číslo (+220 Kč)</option>
+    <option value="jmeno">Jméno (+200 Kč)</option>
+  </select>
+</div>
+
+<div class="section">
+  <label class="label">Font výšivky</label>
+  <select id="fontSelect">
+    <option value="">-- vyberte --</option>
+    <option value="desire">Desire</option>
+    <option value="pepsi">PEPSI</option>
+    <option value="charlie">Charlie</option>
+    <option value="aura">Aura</option>
+    <option value="times">Times</option>
+    <option value="arial">Arial</option>
+  </select>
+</div>
+
+
+<div class="section" id="jmenoInput" style="display:none;">
+  <label class="label">Jméno</label>
+  <input type="text" id="vysivkaJmeno" placeholder="Zadejte jméno">
+</div>
+
+<div class="section" id="telefonInput" style="display:none;">
+  <label class="label">Telefon</label>
+  <input type="text" id="vysivkaTelefon" placeholder="Zadejte telefon">
+</div>
+
+<div class="section">
+  <label class="label">Barva výšivky</label>
+  <div id="vysivkaBarvy" class="colors"></div>
+</div>
+
+<div class="section">
+  <label class="label">Grafika navíc před + za textem výšivky</label>
+  <select id="grafikaSelect">
+    <option value="">-- vyberte --</option>
+    <option value="vlajky">Vlajky (+ 50 Kč)</option>
+    <option value="symboly">Symboly (+ 15 Kč)</option>
+  </select>
+</div>
+
+<div class="section" id="vlajkyWrapper" style="display:none;">
+  <label class="label">Vyber vlajku</label>
+  <div class="colors" id="flags">
+    <img src="cz.png" alt="Česká republika" title="Česká republika" class="flag">
+    <img src="dk.png" alt="Dánsko" title="Dánsko" class="flag">
+    <img src="fi.png" alt="Finsko" title="Finsko" class="flag">
+    <img src="fr.png" alt="Francie" title="Francie" class="flag">
+    <img src="jm.png" alt="Jamajka" title="Jamajka" class="flag">
+    <img src="za.png" alt="JAR" title="JAR" class="flag">
+    <img src="ca.png" alt="Kanada" title="Kanada" class="flag">
+    <img src="lu.png" alt="Lucembursko" title="Lucembursko" class="flag">
+    <img src="hu.png" alt="Maďarsko" title="Maďarsko" class="flag">
+    <img src="de.png" alt="Německo" title="Německo" class="flag">
+    <img src="nl.png" alt="Nizozemsko" title="Nizozemsko" class="flag">
+    <img src="no.png" alt="Norsko" title="Norsko" class="flag">
+    <img src="ma.png" alt="Maroko" title="Maroko" class="flag">
+    <img src="co.png" alt="Kolumbie" title="Kolumbie" class="flag">
+    <img src="ch.png" alt="Švýcarsko" title="Švýcarsko" class="flag">
+    <img src="be.png" alt="Belgie" title="Belgie" class="flag">
+  </div>
+</div>
+
+
+
+  <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg">
+    <rect x="123" y="30" width="454" height="5" fill="#C0C0C0" id="lemTop" visibility="hidden"/>
+    <rect x="123" y="85" width="454" height="5" fill="#C0C0C0" id="lemBottom" visibility="hidden"/>
+    <rect x="115" y="35" width="470" height="50" rx="12" fill="black" id="lemovani"/>
+    <rect x="120" y="40" width="460" height="40" rx="6" fill="#FF00FF" id="popruhBarva"/>
+    <text x="350" y="66" font-size="16" text-anchor="middle" fill="white"></text>
+    <rect x="40" y="30" width="50" height="60" fill="#333" rx="6" id="spona"/>
+    <rect x="100" y="34" width="14" height="52" fill="#333" rx="2" id="posuvka"/>
+    <rect x="130" y="40" width="14" height="40" fill="#C0C0C0" id="stitkyLeft" visibility="hidden"/>
+    <rect x="560" y="40" width="14" height="40" fill="#C0C0C0" id="stitkyRight" visibility="hidden"/>
+    <circle cx="605" cy="60" r="21" stroke="#333" stroke-width="8" fill="none"/>
+    <text x="350" y="66" font-size="16" text-anchor="middle" fill="#FFFFFF" font-family="Arial" id="vysivkaText"></text>
+  </svg>
+
+  <script>
+    const strapColorsByWidth = {
+      15: { "Černá": "#000000", "Hnědá": "#5C4033", "Fialová": "#800080", "Modrá": "#0000FF", "Červená": "#FF0000",
+        "Žlutá": "#FFFF00", "Oranžová": "#FFA500", "Reflexní zelená": "#7CFC00", "Růžová": "#FFC0CB",
+        "Tyrkysová": "#40E0D0", "Capucino": "#C19A6B", "Champagne": "#F7E7CE", "Stříbrná": "#C0C0C0",
+        "Zelená": "#008000", "Olivová": "#808000", "Tmavě šedá": "#555555", "Skořicová": "#A0522D",
+        "Mint": "#AAF0D1", "Fuchsiová": "#FF00FF", "Šeříková": "#D8BFD8"
+      },
+      20: { "Černá": "#000000", "Hnědá": "#5C4033", "Fialová": "#800080", "Modrá": "#0000FF", "Červená": "#FF0000",
+        "Žlutá": "#FFFF00", "Oranžová": "#FFA500", "Reflexní zelená": "#7CFC00", "Růžová": "#FFC0CB",
+        "Tyrkysová": "#40E0D0", "Capucino": "#C19A6B", "Champagne": "#F7E7CE", "Stříbrná": "#C0C0C0",
+        "Zelená": "#008000", "Olivová": "#808000", "Tmavě šedá": "#555555", "Mint": "#AAF0D1",
+        "Fuchsiová": "#FF00FF", "Šeříková": "#D8BFD8"
+      },
+      25: { "Černá": "#000000", "Hnědá": "#5C4033", "Fialová": "#800080", "Modrá": "#0000FF", "Červená": "#FF0000",
+        "Žlutá": "#FFFF00", "Oranžová": "#FFA500", "Reflexní zelená": "#7CFC00", "Tyrkysová": "#40E0D0",
+        "Capucino": "#C19A6B", "Stříbrná": "#C0C0C0", "Zelená": "#008000", "Olivová": "#808000",
+        "Mint": "#AAF0D1", "Fuchsiová": "#FF00FF", "Šeřík": "#D8BFD8"
+      },
+      30: { "Černá": "#000000", "Hnědá": "#5C4033", "Fialová": "#800080", "Modrá": "#0000FF", "Červená": "#FF0000",
+        "Žlutá": "#FFFF00", "Oranžová": "#FFA500", "Reflexní zelená": "#7CFC00", "Růžová": "#FFC0CB",
+        "Tyrkysová": "#40E0D0", "Capucino": "#C19A6B", "Champagne": "#F7E7CE", "Stříbrná": "#C0C0C0",
+        "Zelená": "#008000", "Olivová": "#808000", "Tmavě šedá": "#555555", "Mint": "#AAF0D1",
+        "Fuchsiová": "#FF00FF", "Šeříková": "#D8BFD8"
+      },
+      40: { "Černá": "#000000", "Hnědá": "#5C4033", "Fialová": "#800080", "Modrá": "#0000FF", "Červená": "#FF0000",
+        "Žlutá": "#FFFF00", "Oranžová": "#FFA500", "Reflexní zelená": "#7CFC00", "Růžová": "#FFC0CB",
+        "Tyrkysová": "#40E0D0", "Capucino": "#C19A6B", "Champagne": "#F7E7CE", "Stříbrná": "#C0C0C0",
+        "Zelená": "#008000", "Olivová": "#808000", "Tmavě šedá": "#555555", "Skořicová": "#A0522D"
+      }
+    };
+
+    const paddingColors = {
+  "Žlutá": "#FFFF00", "Maskáč": "#8B8878", "Tmavá písková": "#A78B71", "Blankytně modrá": "#ADD8E6",
+  "Tmavá šedá": "#555555", "Mint": "#AAF0D1", "Periwinkle blue": "#CCCCFF", "Skořicová": "#A0522D",
+  "Lososová": "#FFA07A", "Levandulová": "#E6E6FA", "Malinová": "#DB7093", "Cihlová": "#B22222",
+  "Antracit prožíhaná": "#444444", "Petrolejová": "#2F4F4F", "Reflexní maskáč": "#006400", "Borůvková": "#4B0082",
+  "Starorůžová": "#D8A39D", "Poměnková": "#87CEFA", "Petrolej prožíhaná": "#00688B", "Granát prožíhaná": "#3F4D63",
+  "Bílá": "#FFFFFF", "Reflexní žlutozelená": "#C6FF00", "Tyrkysová": "#40E0D0", "Reflexní oranžová": "#FF8C00",
+  "Oranžová": "#FFA500", "Růžová": "#FF69B4", "Červená": "#FF0000", "Sytě fialová": "#800080",
+  "Melír tyrkys": "#20B2AA", "Olivová": "#556B2F", "Navy modrá": "#000080", "Bordó": "#800000",
+  "Limetka": "#BFFF00", "Čokoláda": "#381819", "Černá": "#000000"
+
+    };
+
+const embroideryColors = {
+  "Bílá": "#FFFFFF", "Tyrkysová": "#40E0D0", "Mint": "#AAF0D1", "Periwinkle blue": "#CCCCFF",
+  "Stříbrná": "#C0C0C0", "Reflexní žlutozelená": "#C6FF00", "Perlová": "#FDEEF4", "Žlutá": "#FFFF00",
+  "Smetanová": "#FFFDD0", "Zlatá": "#FFD700", "Baby růžová": "#F4C2C2", "Lila": "#D8BFD8",
+  "Reflexní oranžová": "#FF8C00", "Sytě růžová": "#FF1493", "Oranžová": "#FFA500", "Červená": "#FF0000",
+  "Fialová": "#800080", "Modrá": "#0000FF", "Navy modrá": "#000080", "Bordó": "#800000",
+  "Limetka": "#BFFF00", "Zelená": "#008000", "Olivová": "#556B2F", "Měděná": "#B87333",
+  "Světle hnědá": "#A52A2A", "Capuccino": "#C19A6B", "Hnědá": "#5C4033", "Kovová": "#A9A9A9", "Černá": "#000000"
+};
+
+
+
+const fontSelect = document.getElementById("fontSelect");
+
+// Zatím nezmění styl, ale uloží výběr (můžeš logovat nebo posílat dál)
+fontSelect.addEventListener("change", () => {
+  const font = fontSelect.value;
+  // Zde můžeme změnit font-family pokud budeš chtít vizuální náhled
+  // vysivkaText.setAttribute("font-family", font);
+  console.log("Zvolený font:", font);
+});
+
+    const strapContainer = document.getElementById("strapColors");
+    const borderContainer = document.getElementById("borderColors");
+    const strapRect = document.getElementById("popruhBarva");
+    const borderRect = document.getElementById("lemovani");
+    const sponaRect = document.getElementById("spona");
+    const posuvkaRect = document.getElementById("posuvka");
+    const widthSelect = document.getElementById("widthSelect");
+
+    function renderColorOptions(container, colors, callback) {
+      container.innerHTML = "";
+      Object.entries(colors).forEach(([name, hex]) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "color-wrapper";
+        const div = document.createElement("div");
+        div.className = "color-option";
+        div.style.backgroundColor = hex;
+        div.addEventListener("click", () => {
+          container.querySelectorAll(".color-option").forEach(el => el.classList.remove("selected"));
+          div.classList.add("selected");
+          callback(hex);
+        });
+        const label = document.createElement("div");
+        label.className = "color-label";
+        label.textContent = name;
+        wrapper.appendChild(div);
+        wrapper.appendChild(label);
+        container.appendChild(wrapper);
+      });
+    }
+
+    function renderStrapColors(width) {
+      renderColorOptions(strapContainer, strapColorsByWidth[width] || {}, color => {
+        strapRect.setAttribute("fill", color);
+      });
+    }
+
+    renderColorOptions(borderContainer, paddingColors, color => {
+      borderRect.setAttribute("fill", color);
+    });
+
+    widthSelect.addEventListener("change", () => {
+      renderStrapColors(parseInt(widthSelect.value));
+    });
+
+    renderStrapColors(parseInt(widthSelect.value));
+
+    document.getElementById("sponaSelect").addEventListener("change", (e) => {
+      sponaRect.setAttribute("fill", e.target.value === "kov" ? "#C0C0C0" : "#333");
+    });
+
+    document.getElementById("posuvkaSelect").addEventListener("change", (e) => {
+      posuvkaRect.setAttribute("fill", e.target.value === "nerez" ? "#C0C0C0" : "#333");
+    });
+
+    document.getElementById("reflexStitky").addEventListener("change", (e) => {
+      const vis = e.target.checked ? "visible" : "hidden";
+      document.getElementById("stitkyLeft").setAttribute("visibility", vis);
+      document.getElementById("stitkyRight").setAttribute("visibility", vis);
+    });
+
+    document.getElementById("reflexLemovka").addEventListener("change", (e) => {
+      const vis = e.target.checked ? "visible" : "hidden";
+      document.getElementById("lemTop").setAttribute("visibility", vis);
+      document.getElementById("lemBottom").setAttribute("visibility", vis);
+    });
+
+const vysivkaText = document.getElementById("vysivkaText");
+const vysivkaSelect = document.getElementById("vysivkaSelect");
+const inputJmeno = document.getElementById("jmenoInput");
+const inputTelefon = document.getElementById("telefonInput");
+
+vysivkaSelect.addEventListener("change", () => {
+  const typ = vysivkaSelect.value;
+  inputJmeno.style.display = (typ === "jmeno" || typ === "jmenoTelefon") ? "block" : "none";
+  inputTelefon.style.display = (typ === "jmenoTelefon") ? "block" : "none";
+  updateVysivkaText();
+});
+
+document.getElementById("vysivkaJmeno").addEventListener("input", updateVysivkaText);
+document.getElementById("vysivkaTelefon").addEventListener("input", updateVysivkaText);
+
+function updateVysivkaText() {
+  const typ = vysivkaSelect.value;
+  const jmeno = document.getElementById("vysivkaJmeno").value || "";
+  const tel = document.getElementById("vysivkaTelefon").value || "";
+  if (typ === "jmenoTelefon") {
+    vysivkaText.textContent = `${jmeno} ${tel}`;
+  } else if (typ === "jmeno") {
+    vysivkaText.textContent = jmeno;
+  } else {
+    vysivkaText.textContent = "";
+  }
+}
+
+// výběr barvy výšivky
+const embroideryContainer = document.getElementById("vysivkaBarvy");
+function renderEmbroideryColors() {
+  Object.entries(embroideryColors).forEach(([name, hex]) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "color-wrapper";
+    const div = document.createElement("div");
+    div.className = "color-option";
+    div.style.backgroundColor = hex;
+    div.addEventListener("click", () => {
+      embroideryContainer.querySelectorAll(".color-option").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      vysivkaText.setAttribute("fill", hex);
+    });
+    const label = document.createElement("div");
+    label.className = "color-label";
+    label.textContent = name;
+    wrapper.appendChild(div);
+    wrapper.appendChild(label);
+    embroideryContainer.appendChild(wrapper);
+  });
+}
+renderEmbroideryColors();
+
+const grafikaSelect = document.getElementById("grafikaSelect");
+const vlajkyWrapper = document.getElementById("vlajkyWrapper");
+
+grafikaSelect.addEventListener("change", () => {
+  vlajkyWrapper.style.display = grafikaSelect.value === "vlajky" ? "block" : "none";
+});
+
+document.querySelectorAll(".flag").forEach(flag => {
+  flag.addEventListener("click", () => {
+    document.querySelectorAll(".flag").forEach(f => f.classList.remove("selected"));
+    flag.classList.add("selected");
+  });
+});
+
+  </script>
+</body>
+</html>
